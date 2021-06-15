@@ -30,88 +30,81 @@ public class CalcEngineSet extends CalcEngine {
 	}
 	
 	public void setSet(String input, String setName) throws IllegalArgumentException{
-		// no idea what this is supposed to be doing
-		if(setName.equals("setA")) {
+		Set<String> out = new HashSet<String>();
 		Scanner scanner = new Scanner(input).useDelimiter(",");
 		while (scanner.hasNext()) {
 			String in = scanner.next();
-			setA.add(in);
+			out.add(in);
+		}
+		if(setName.equals("setA")) setA.addAll(out); 
+		switch(setName) {
+			case "setA" 	-> setA.addAll(out);
+			case "setB" 	-> setB.addAll(out);
+			case "setResult"-> setResult.addAll(out);
 		}
 		scanner.close();
-		} else if(setName.equals("setB")) {
-			Scanner scanner = new Scanner(input).useDelimiter(",");
-			while (scanner.hasNext()) {
-				String in = scanner.next();
-				setB.add(in);
-			}
-			scanner.close();
-		} else {
-			Scanner scanner = new Scanner(input).useDelimiter(",");
-		while (scanner.hasNext()) {
-			String in = scanner.next();
-			setResult.add(in);
-		}
-		scanner.close();
-		}
 	}
 	
 	public int sizeOfSet(String setName) {
-		if(setName.equals("setA")) return setA.size();
-		else return setB.size();
+		switch(setName) {
+		 	case "setA" 	-> {return setA.size();}
+		 	case "setB" 	-> {return setB.size();}
+		 	case "setResult"-> {return setResult.size();}
+		} return 0;
 	}
 	
-	public void clear() {
-		if(setA==null||setB==null) {
-
+	public void clear(String setName) {
+		switch (setName) {
+			case "setA" 	-> {if(setA!=null)setA.clear();}
+			case "setB" 	-> {if(setB!=null)setB.clear();}
+			case "setResult"-> {if(setResult!=null)setResult.clear();}
+			case "all"		-> {if(setA!=null)setA.clear();
+								if(setB!=null)setB.clear();
+								System.out.println(setResult);
+								if(setResult!=null)setResult.clear();
+								System.out.println(setResult);
+								}
 		}
-		else {
-		setA.clear();
-		setB.clear();
-		setResult.clear();
-		}
-
 	}
 	
 	public Set<String> union(){
-		Set<String> out = new HashSet<String>(setA);
+		setResult.addAll(setA);
 		String setBStr =removeFirstAndLast(setB.toString());
 		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String input = scanner.next();
-			out.add(input);	
+			setResult.add(input);	
 		}
 		scanner.close();
-		return out;
+		return setResult;
 	}
 	
 	public Set<String> intersection(){
-		Set<String> out = new HashSet<String>();
 		String setBStr=removeFirstAndLast(setB.toString());
 		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String input = scanner.next();
-			if(setA.contains(input)) out.add(input);
+			if(setA.contains(input)) setResult.add(input);
 		}
 		scanner.close();
-		return out;
+		return setResult;
 	}
 	
 	public Set<String> subtraction(){
-		HashSet out = new HashSet(setA);
+		setResult.addAll(setA);
 		String setBStr=removeFirstAndLast(setB.toString());
 		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
 		while (scanner.hasNext()) {
 			String input = scanner.next();
-			if(setA.contains(input)) out.remove(input);
+			if(setA.contains(input)) setResult.remove(input);
 		}
 		scanner.close();
-		return out;
+		return setResult;
 	}
 	
-	public String removeFirstAndLast(String in) {
-		if(in.charAt(0)=='{' && in.charAt(in.length()-1)=='}' || in.charAt(0)=='[' && in.charAt(in.length()-1)==']')
-		return (String) in.subSequence(1, in.length()-1);
-		else return in;
+	public void pushResultTo(String setName){
+		if(setName.equals("setA")) setA.addAll(parseStringToSet(removeFirstAndLast(setResult.toString())));
+		if(setName.equals("setB")) setB.addAll(parseStringToSet(removeFirstAndLast(setResult.toString())));
 	}
 
 	public Set<String> getSet(String setName){
@@ -127,36 +120,36 @@ public class CalcEngineSet extends CalcEngine {
 	public String removeSpacebars(String in) {
 		return in.replaceAll(" ", "");
 	}
-
-	public void pushResultTo(String setName){
-		if(setName.equals("setA")) setA=parseStringToSet(removeFirstAndLast(setResult.toString()));
-		if(setName.equals("setB")) setB=parseStringToSet(removeFirstAndLast(setResult.toString()));
+	
+	public String removeFirstAndLast(String in) {
+		if(in.charAt(0)=='[' && in.charAt(in.length()-1)==']')
+		return (String) in.subSequence(1, in.length()-1);
+		else return in;
 	}
-
-
-
-//	public static void main(String[] args) {
-//
-//		new CalcEngineSet().run();
-//	}
-//	
-//	
-//	
-//	public void run() {
-//		String inA="A,{E},B,C";
-//		String inB="B,C,{},F";
-//		setA=parseStringToSet(inA);
-//		setB=parseStringToSet(inB);
-//		System.out.println("SetA= "+setA);
-//		System.out.println("SetB= "+setB);
-//		setResult=union();
-//		System.out.println("Result union= "+setResult);
-//		setResult=intersection();
-//		System.out.println("Result intersection= "+setResult);
-//		setResult=subtraction();
-//		System.out.println("Result subtraction= "+setResult);
-//		pushResultTo("setA");
-//		System.out.println("SetA after push= "+setA);
-//	}
-
+	
+	public Set<String> powerSet(String setName){
+		String setStr=removeFirstAndLast(getSet(setName).toString());
+		Scanner scanner = new Scanner(setStr).useDelimiter(", ");
+		String[] sAr = new String[getSet(setName).size()];
+		for(int i=0; scanner.hasNext(); i++) {
+			String input = scanner.next();
+			sAr[i]=input;
+		}
+		long powerSetSize = (long) Math.pow(2, getSet(setName).size());
+		String temp = "";
+		for(int j=0; j<powerSetSize; j++) {
+			for(int k=0; k<getSet(setName).size(); k++) {
+				if((j & (1 << k))>0) {
+					if(temp.isEmpty()) temp+=sAr[k];
+					else temp+=","+sAr[k];
+				}
+			}
+			setResult.add("{"+temp+"}");
+			temp="";
+		}
+	return setResult;
+	}
+	
+	
+	
 }

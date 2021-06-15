@@ -24,6 +24,10 @@ public class UserInterfaceSet extends UserInterface {
     private JButton pushB;
     private JButton lengthA;
     private JButton lengthB;
+    private JButton powerA;
+    private JButton powerB;
+    private JButton clearA;
+    private JButton clearB;
 
 
     /**
@@ -38,92 +42,118 @@ public class UserInterfaceSet extends UserInterface {
 
     protected void makeFrame() {
         frame = new JFrame(calc.getTitle());
-        frame.setMinimumSize(new Dimension(500, 320));
+        frame.setMinimumSize(new Dimension(250, 200));
 
         JPanel contentPane = (JPanel) frame.getContentPane();
-        contentPane.setLayout(new GridLayout(6, 1));
+        contentPane.setLayout(new BorderLayout(2, 2));
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-
+        
+        
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
         inputA = new JTextField();
-        contentPane.add(inputA);
+        textPanel.add(inputA);
 
         inputB = new JTextField();
-        contentPane.add(inputB);
-
-        contentPane.add(Box.createVerticalStrut(1));
-
-
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 4));
+        textPanel.add(inputB);
+        contentPane.add(textPanel, BorderLayout.NORTH);
+        
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 4));
         union = addButton(buttonPanel, "Union");
         subtraction = addButton(buttonPanel, "Subtraction");
         intersection = addButton(buttonPanel, "Intersection");
-        clear = addButton(buttonPanel, "Clear");
+        clear = addButton(buttonPanel, "Clear All");
         pushA = addButton(buttonPanel, "Push A");
-        pushB = addButton(buttonPanel, "Push B");
         lengthA = addButton(buttonPanel, "Length Set A");
+        powerA = addButton(buttonPanel, "Power Set A");
+        clearA = addButton(buttonPanel, "Clear A");
+        pushB = addButton(buttonPanel, "Push B");
         lengthB = addButton(buttonPanel, "Length Set B");
+        powerB = addButton(buttonPanel, "Power Set B");
+        clearB = addButton(buttonPanel, "Clear B");
         contentPane.add(buttonPanel);
-
-        contentPane.add(Box.createVerticalStrut(1));
-
+       
         output = new JTextField();
-        contentPane.add(output);
-
+        contentPane.add(output, BorderLayout.SOUTH);
+        
+        frame.pack();
     }
-
-    public void redisplay(){
-        inputA.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setA").toString())));
-        inputB.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setB").toString())));
-        // output.setText("" + calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString()));
+    
+    public void preAction() {
+    	calcSet.clear("setResult");
+    	calcSet.setSet(inputA.getText(), "setA");
+        calcSet.setSet(inputB.getText(), "setB");
     }
+    
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
-
+        
         switch (command) {
             case "Union" -> {
-                calcSet.setSet(inputA.getText(), "setA");
-                calcSet.setSet(inputB.getText(), "setB");
+            	preAction();
                 output.setText(calcSet.union().toString());
             }
             case "Intersection" -> {
                 calcSet.setSet(inputA.getText(), "setA");
-                calcSet.setSet(inputB.getText(), "setB");
+                preAction();
                 output.setText(calcSet.intersection().toString());
             }
             case "Subtraction" -> {
-                calcSet.setSet(inputA.getText(), "setA");
-                calcSet.setSet(inputB.getText(), "setB");
+            	preAction();
                 output.setText(calcSet.subtraction().toString());
             }
             case "Push A" -> {
                 if(output != null){
-                    inputA.setText(calcSet.removeSpacebars(calcSet.removeFirstAndLast(output.getText())));
-                    calcSet.setSet(inputA.getText(), "setA");
+                	calcSet.clear("setA");
+                    calcSet.setSet(calcSet.removeSpacebars(calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString())), "setA");
                 }
             }
             case "Push B" -> {
                if(output != null){
-                    inputB.setText(calcSet.removeSpacebars(calcSet.removeFirstAndLast(output.getText())));
-                    calcSet.setSet(inputB.getText(), "setB");
-                   System.out.println(inputB.getText());
+            	   calcSet.clear("setB");
+                   calcSet.setSet(calcSet.removeSpacebars(calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString())), "setB");
                 }
             }
             case "Length Set A" ->  {
-                calcSet.setSet(inputA.getText(), "setA");
-                output.setText("" + (calcSet.parseStringToSet(inputA.getText()).size()));
+            	calcSet.clear("setResult");
+            	calcSet.setSet(inputA.getText(), "setA");
+                calcSet.setSet((""+calcSet.sizeOfSet("setA")), "setResult");
             }
             case "Length Set B" -> {
-                calcSet.setSet(inputB.getText(), "setB");
-
-                output.setText("" + (calcSet.parseStringToSet(inputB.getText()).size()));
+            	calcSet.clear("setResult");
+            	calcSet.setSet(inputB.getText(), "setB");
+                calcSet.setSet((""+calcSet.sizeOfSet("setB")), "setResult");
             }
-            case "Clear" -> {
-                calcSet.clear();
+            case "Clear All" -> {
+                calcSet.clear("all");
 
             }
+            case "Clear A" -> {
+                calcSet.clear("setA");
 
-        } redisplay();
+            }
+            case "Clear B" -> {
+                calcSet.clear("setB");
+
+            }
+            case "Power Set A" -> {
+            	calcSet.setSet(inputA.getText(), "setA");
+            	calcSet.clear("setResult");
+            	calcSet.powerSet("setA");
+            }
+            case "Power Set B" -> {
+            	calcSet.setSet(inputB.getText(), "setB");
+            	calcSet.clear("setResult");
+            	calcSet.powerSet("setB");
+            }
+
+        } 
+        redisplay();
+    }
+    
+    public void redisplay(){
+        inputA.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setA").toString())));
+        inputB.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setB").toString())));
+        output.setText("" + calcSet.removeSpacebars(calcSet.getSet("setResult").toString()));
     }
 }
 
