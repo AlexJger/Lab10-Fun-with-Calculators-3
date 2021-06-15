@@ -72,15 +72,58 @@ public class UserInterfaceSet extends UserInterface {
 
     }
 
+    public void redisplay(){
+        inputA.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setA").toString())));
+        inputB.setText("" + calcSet.removeFirstAndLast(calcSet.removeSpacebars(calcSet.getSet("setB").toString())));
+        // output.setText("" + calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString()));
+    }
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
 
         switch (command) {
             case "Union" -> {
+                calcSet.setSet(inputA.getText(), "setA");
+                calcSet.setSet(inputB.getText(), "setB");
+                output.setText(calcSet.union().toString());
+            }
+            case "Intersection" -> {
+                calcSet.setSet(inputA.getText(), "setA");
+                calcSet.setSet(inputB.getText(), "setB");
+                output.setText(calcSet.intersection().toString());
+            }
+            case "Subtraction" -> {
+                calcSet.setSet(inputA.getText(), "setA");
+                calcSet.setSet(inputB.getText(), "setB");
+                output.setText(calcSet.subtraction().toString());
+            }
+            case "Push A" -> {
+                if(output != null){
+                    inputA.setText(calcSet.removeSpacebars(calcSet.removeFirstAndLast(output.getText())));
+                    calcSet.setSet(inputA.getText(), "setA");
+                }
+            }
+            case "Push B" -> {
+               if(output != null){
+                    inputB.setText(calcSet.removeSpacebars(calcSet.removeFirstAndLast(output.getText())));
+                    calcSet.setSet(inputB.getText(), "setB");
+                   System.out.println(inputB.getText());
+                }
+            }
+            case "Length Set A" ->  {
+                calcSet.setSet(inputA.getText(), "setA");
+                output.setText("" + (calcSet.parseStringToSet(inputA.getText()).size()));
+            }
+            case "Length Set B" -> {
+                calcSet.setSet(inputB.getText(), "setB");
 
-               
+                output.setText("" + (calcSet.parseStringToSet(inputB.getText()).size()));
+            }
+            case "Clear" -> {
+                calcSet.clear();
+
             }
 
-        }
+        } redisplay();
     }
 }
+

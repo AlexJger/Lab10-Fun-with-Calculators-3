@@ -61,9 +61,15 @@ public class CalcEngineSet extends CalcEngine {
 	}
 	
 	public void clear() {
+		if(setA==null||setB==null) {
+
+		}
+		else {
 		setA.clear();
 		setB.clear();
 		setResult.clear();
+		}
+
 	}
 	
 	public Set<String> union(){
@@ -108,13 +114,27 @@ public class CalcEngineSet extends CalcEngine {
 		else return in;
 	}
 
-	
-	public void pushResultTo(String setName){
-		if(setName.equals("setA")) setA=setResult;
-		else setB=setResult;
+	public Set<String> getSet(String setName){
+		Set<String> out = new HashSet<String>();
+		switch(setName) {
+			case "setA" 	-> out=setA;
+			case "setB" 	-> out=setB;
+			case "setResult"-> out=setResult;
+		}
+		return out;
 	}
-	
-	
+
+	public String removeSpacebars(String in) {
+		return in.replaceAll(" ", "");
+	}
+
+	public void pushResultTo(String setName){
+		if(setName.equals("setA")) setA=parseStringToSet(removeFirstAndLast(setResult.toString()));
+		if(setName.equals("setB")) setB=parseStringToSet(removeFirstAndLast(setResult.toString()));
+	}
+
+
+
 //	public static void main(String[] args) {
 //
 //		new CalcEngineSet().run();
