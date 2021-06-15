@@ -6,10 +6,12 @@ import main.calculator.decimal.UserInterface;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.Set;
 
 public class UserInterfaceSet extends UserInterface {
 
-
+    CalcEngineSet calcSet;
     private JTextField inputA;
     private JTextField inputB;
     private JTextField output;
@@ -24,25 +26,23 @@ public class UserInterfaceSet extends UserInterface {
     private JButton lengthB;
 
 
-
-
     /**
      * Create a user interface.
      *
      * @param engine The calculator engine.
      */
-    public UserInterfaceSet(CalcEngine engine) {
+    public UserInterfaceSet(CalcEngineSet engine) {
         super(engine);
+        calcSet = engine;
     }
 
     protected void makeFrame() {
         frame = new JFrame(calc.getTitle());
-        frame.setMinimumSize(new Dimension(500,320));
+        frame.setMinimumSize(new Dimension(500, 320));
 
-        JPanel contentPane = (JPanel)frame.getContentPane();
-        contentPane.setLayout(new GridLayout(6,1));
-        contentPane.setBorder(new EmptyBorder( 10, 10, 10, 10));
-
+        JPanel contentPane = (JPanel) frame.getContentPane();
+        contentPane.setLayout(new GridLayout(6, 1));
+        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 
         inputA = new JTextField();
@@ -56,10 +56,10 @@ public class UserInterfaceSet extends UserInterface {
 
         JPanel buttonPanel = new JPanel(new GridLayout(2, 4));
         union = addButton(buttonPanel, "Union");
-        subtraction = addButton(buttonPanel,"Subtraction");
+        subtraction = addButton(buttonPanel, "Subtraction");
         intersection = addButton(buttonPanel, "Intersection");
-        clear = addButton(buttonPanel,"Clear");
-        pushA = addButton(buttonPanel,"Push A");
+        clear = addButton(buttonPanel, "Clear");
+        pushA = addButton(buttonPanel, "Push A");
         pushB = addButton(buttonPanel, "Push B");
         lengthA = addButton(buttonPanel, "Length Set A");
         lengthB = addButton(buttonPanel, "Length Set B");
@@ -72,4 +72,15 @@ public class UserInterfaceSet extends UserInterface {
 
     }
 
+    public void actionPerformed(ActionEvent event) {
+        String command = event.getActionCommand();
+
+        switch (command) {
+            case "Union" -> {
+
+               
+            }
+
+        }
+    }
 }

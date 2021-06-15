@@ -18,7 +18,7 @@ public class CalcEngineSet extends CalcEngine {
 		super();
 	}
 	
-	private Set<String> parseStringToSet(String input){
+	public Set<String> parseStringToSet(String input){
 		Set<String> out = new HashSet<String>();
 		Scanner scanner = new Scanner(input).useDelimiter(",");
 		while (scanner.hasNext()) {
