@@ -1,5 +1,9 @@
 package main.calculator.set;
 
-public class CalcEngineSet {
+import main.calculator.decimal.CalcEngine;
 
+public class CalcEngineSet extends CalcEngine {
+    public CalcEngineSet(){
+        super();
+    }
 }
