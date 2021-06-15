@@ -31,6 +31,28 @@ public class CalcEngineSet extends CalcEngine {
 	
 	public void setSet(String input, String setName) throws IllegalArgumentException{
 		// no idea what this is supposed to be doing
+		if(setName.equals("setA")) {
+		Scanner scanner = new Scanner(input).useDelimiter(",");
+		while (scanner.hasNext()) {
+			String in = scanner.next();
+			setA.add(in);
+		}
+		scanner.close();
+		} else if(setName.equals("setB")) {
+			Scanner scanner = new Scanner(input).useDelimiter(",");
+			while (scanner.hasNext()) {
+				String in = scanner.next();
+				setB.add(in);
+			}
+			scanner.close();
+		} else {
+			Scanner scanner = new Scanner(input).useDelimiter(",");
+		while (scanner.hasNext()) {
+			String in = scanner.next();
+			setResult.add(in);
+		}
+		scanner.close();
+		}
 	}
 	
 	public int sizeOfSet(String setName) {
