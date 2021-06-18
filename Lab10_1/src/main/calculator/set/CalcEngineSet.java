@@ -67,36 +67,20 @@ public class CalcEngineSet extends CalcEngine {
 	
 	public Set<String> union(){
 		setResult.addAll(setA);
-		String setBStr =removeFirstAndLast(setB.toString());
-		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
-		while (scanner.hasNext()) {
-			String input = scanner.next();
-			setResult.add(input);	
-		}
-		scanner.close();
+		setResult.addAll(setB);
 		return setResult;
 	}
 	
 	public Set<String> intersection(){
-		String setBStr=removeFirstAndLast(setB.toString());
-		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
-		while (scanner.hasNext()) {
-			String input = scanner.next();
-			if(setA.contains(input)) setResult.add(input);
+		for (String elem : setB) {
+			if(setA.contains(elem)) setResult.add(elem);
 		}
-		scanner.close();
 		return setResult;
 	}
 	
 	public Set<String> subtraction(){
 		setResult.addAll(setA);
-		String setBStr=removeFirstAndLast(setB.toString());
-		Scanner scanner = new Scanner(setBStr).useDelimiter(", ");
-		while (scanner.hasNext()) {
-			String input = scanner.next();
-			if(setA.contains(input)) setResult.remove(input);
-		}
-		scanner.close();
+		setResult.removeAll(setB);
 		return setResult;
 	}
 	
@@ -126,15 +110,14 @@ public class CalcEngineSet extends CalcEngine {
 	}
 
 	public Set<String> powerSet(String setName){
-		String setStr=removeFirstAndLast(getSet(setName).toString());
-		Scanner scanner = new Scanner(setStr).useDelimiter(", ");
 		String[] sAr = new String[getSet(setName).size()];
-		for(int i=0; scanner.hasNext(); i++) {
-			String input = scanner.next();
-			sAr[i]=input;
+		int i=0;
+		for(String elem : getSet(setName)) {
+			sAr[i]=elem;
+			i++;
 		}
 		int size = sAr.length;	//size of set
-		int powerSize = (int) Math.pow(2, size); // size^2 = number of pow elements
+		int powerSize = (int) Math.pow(2, size); // 2^size = number of pow elements
 		
 		for(int j=0; j<powerSize; j++) {
 			String bin= Integer.toBinaryString(j); //convert to binary
@@ -145,37 +128,8 @@ public class CalcEngineSet extends CalcEngine {
 			}
 			setResult.add(tempSet.toString());
 		}
-		
 		return setResult;
-
 	}
 
-	
-//	public Set<String> powerSet(String setName){
-//		String setStr=removeFirstAndLast(getSet(setName).toString());
-//		Scanner scanner = new Scanner(setStr).useDelimiter(", ");
-//		String[] sAr = new String[getSet(setName).size()];
-//		for(int i=0; scanner.hasNext(); i++) {
-//			String input = scanner.next();
-//			sAr[i]=input;
-//		}
-//		long powerSetSize = (long) Math.pow(2, getSet(setName).size());
-//		String temp = "";
-//		for(int j=0; j<powerSetSize; j++) {
-//			for(int k=0; k<getSet(setName).size(); k++) {
-//				System.out.println("j "+j+" k "+k+" (1 << k) "+(1 << k)+" if "+(j & (1 << k)));
-//				// if k'th bit of `j` is set, add `sAr[k]` to the current set
-//				if((j & (1 << k))!=0) {
-//					if(temp.isEmpty()) temp+=sAr[k];
-//					else temp+=","+sAr[k];
-//				}
-//			}
-//			setResult.add("{"+temp+"}");
-//			temp="";
-//		}
-//	return setResult;
-//	}
-	
-	
 	
 }
