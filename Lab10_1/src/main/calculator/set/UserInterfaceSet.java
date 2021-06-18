@@ -103,15 +103,13 @@ public class UserInterfaceSet extends UserInterface {
             }
             case "Push A" -> {
                 if(output != null){
-                	calcSet.clear("setA");
-                    calcSet.setSet(calcSet.removeSpacebars(calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString())), "setA");
+                	calcSet.pushResultTo("setA");
                 }
             }
             case "Push B" -> {
                if(output != null){
-            	   calcSet.clear("setB");
-                   calcSet.setSet(calcSet.removeSpacebars(calcSet.removeFirstAndLast(calcSet.getSet("setResult").toString())), "setB");
-                }
+            	   	calcSet.pushResultTo("setB"); 
+               }
             }
             case "Length Set A" ->  {
             	calcSet.clear("setResult");
